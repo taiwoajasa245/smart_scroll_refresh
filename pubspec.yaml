@@ -1,6 +1,9 @@
-name: simple_pagination
+name: smart_scroll_refresh
 description: A lightweight and flexible Flutter pagination widget that works with any scrollable layout.
 version: 1.0.0
+homepage: https://github.com/taiwoajasa245/smart_scroll_refresh.git
+repository: https://github.com/taiwoajasa245/smart_scroll_refresh.git
+issue_tracker: https://github.com/taiwoajasa245/smart_scroll_refresh.git
 
 
 environment:

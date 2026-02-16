@@ -66,44 +66,70 @@ class _PicsumPaginationPageState extends State<PicsumPaginationPage> {
   }
 
   Future<void> _refreshData() async {
-    _page = 1;
-    _hasMore = true;
-    _photos.clear();
-    await _fetchNextPage();
+    if (_isFetching) return;
+    _isFetching = true;
+
+    try {
+      final url = Uri.parse(
+        'https://picsum.photos/v2/list?page=1&limit=$_limit',
+      );
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List data = jsonDecode(response.body);
+
+        if (mounted) {
+          setState(() {
+            _photos.clear();
+            _photos.addAll(
+              data.map<String>((e) => e['download_url'] as String),
+            );
+            _page = 2;
+            _hasMore = data.isNotEmpty;
+          });
+        }
+      } else {
+        debugPrint('Failed to refresh photos: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error refreshing data: $e');
+    } finally {
+      _isFetching = false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Smart  Pagination')),
-      body: RefreshIndicator(
+      body: PaginatedListView(
+        enablePullToRefresh: true,
         onRefresh: _refreshData,
-        child: PaginatedListView(
-          itemCount: _photos.length,
-          hasMore: _hasMore,
-          onLoadMore: _fetchNextPage,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  _photos[index],
-                  height: 250,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, progress) {
-                    if (progress == null) return child;
-                    return const SizedBox(
-                      height: 250,
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  },
-                ),
+        itemCount: _photos.length,
+        hasMore: _hasMore,
+        onLoadMore: _fetchNextPage,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(8),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                _photos[index],
+                height: 250,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, progress) {
+                  if (progress == null) return child;
+                  return const SizedBox(
+                    height: 250,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                },
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

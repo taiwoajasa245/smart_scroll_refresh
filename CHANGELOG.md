@@ -9,11 +9,11 @@
 - Unit and widget tests for pagination and refresh logic
 
 
-### 🔄 Improved
+### Improved
 - Better state synchronization between refresh and pagination
 - Improved protection against duplicate fetch calls
 
-### 🛠 Internal
+### Internal
 - Minor performance optimizations
 - Code cleanup and refactoring
 

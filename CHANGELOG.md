@@ -1,3 +1,24 @@
+## 1.1.0
+
+###  Added
+- Pull-to-refresh support
+- `enablePullToRefresh` parameter
+- `useRefreshIndicator` parameter for default indicator
+- `onRefresh` callback for manual data refresh
+- Customizable `refreshIndicatorWidget`
+- Unit and widget tests for pagination and refresh logic
+
+
+### 🔄 Improved
+- Better state synchronization between refresh and pagination
+- Improved protection against duplicate fetch calls
+
+### 🛠 Internal
+- Minor performance optimizations
+- Code cleanup and refactoring
+
+
+
 ## 1.0.0
 
 Initial release

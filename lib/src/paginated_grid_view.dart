@@ -10,6 +10,10 @@ class PaginatedGridView extends StatelessWidget {
   final bool hasMore;
   final PaginationController? controller;
   final EdgeInsetsGeometry? padding;
+  final bool enablePullToRefresh;
+  final Future<void> Function()? onRefresh;
+  final Widget? refreshIndicatorWidget;
+  final bool useRefreshIndicator;
 
   const PaginatedGridView({
     super.key,
@@ -20,6 +24,10 @@ class PaginatedGridView extends StatelessWidget {
     required this.hasMore,
     this.controller,
     this.padding,
+    this.enablePullToRefresh = false,
+    this.onRefresh,
+    this.refreshIndicatorWidget,
+    this.useRefreshIndicator = true,
   }) : assert(itemCount >= 0, 'itemCount cannot be negative');
 
   @override
@@ -28,6 +36,10 @@ class PaginatedGridView extends StatelessWidget {
       onLoadMore: onLoadMore,
       hasMore: hasMore,
       controller: controller,
+      enablePullToRefresh: enablePullToRefresh,
+      onRefresh: onRefresh,
+      refreshIndicatorWidget: refreshIndicatorWidget,
+      useRefreshIndicator: useRefreshIndicator,
       builder: (context, controller) {
         return GridView.builder(
           controller: controller,
